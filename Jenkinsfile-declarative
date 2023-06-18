@@ -1,12 +1,12 @@
 pipeline{
 
     agent slave1
-    tools{
+    tools {
 
         maven "maven3.9.2"
     }
 
-    stages{
+    stages {
         stage('clonefromsourcecode'){
             steps{
                 sh "echo 'clone latest code from github'"
@@ -15,9 +15,8 @@ pipeline{
             }
     }
 
-        stage('Test+build+package'){
+    stage('Test+build+package'){
             steps{
-
                 sh "echo 'running sonarqube code quality analysis'"
                 sh "echo 'tesing must pass in order to package application'"
                 sh "mvn install"
@@ -28,12 +27,17 @@ pipeline{
 
             }
         }
-        stage('codequality'){
+    stage('codequality'){
             steps{
                 sh "echo 'performing codequality analysis'"
-                sh "mvn sonar:sonr"
+                sh "mvn sonar:sonar"
+            }
+        }
+        stage('upload2nexus'){
+            steps{
+                sh "mvn deploy"
             }
         }
 
-
+}
 }
