@@ -1,0 +1,39 @@
+pipeline{
+
+    agent slave1
+    tools{
+
+        maven "maven3.9.2"
+    }
+
+    stages{
+        stage('clonefromsourcecode'){
+            steps{
+                sh "echo 'clone latest code from github'"
+                sh "echo 'build developing for dev enviroment'"
+                git ' https://github.com/Ogedasilver/liontech-emr-health-app.git'
+            }
+    }
+
+        stage('Test+build+package'){
+            steps{
+
+                sh "echo 'running sonarqube code quality analysis'"
+                sh "echo 'tesing must pass in order to package application'"
+                sh "mvn install"
+                sh "mvn test"
+                sh "mvn validate"
+                sh "mvn verify"
+                sh "mvn clean package"
+
+            }
+        }
+        stage('codequality'){
+            steps{
+                sh "echo 'performing codequality analysis'"
+                sh "mvn sonar:sonr"
+            }
+        }
+
+
+}
