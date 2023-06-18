@@ -1,6 +1,6 @@
 pipeline{
 
-    agent slave1
+    agent any
     tools {
 
         maven "maven3.9.2"
@@ -17,7 +17,7 @@ pipeline{
 
     stage('Test+build+package'){
             steps{
-                
+
                 sh "echo 'running sonarqube code quality analysis'"
                 sh "echo 'tesing must pass in order to package application'"
                 sh "mvn install"
